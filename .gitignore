@@ -1,0 +1,12 @@
+signage_config.php
+*_cache.json
+
+# IDEs and Editors
+.vscode/
+
+# AI Agents
+.agents/
+.agent/
+_agents/
+_agent/
+.gemini/

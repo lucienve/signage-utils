@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gold Key Specials</title>
+    <style>
+        body { 
+            margin: 0; padding: 30px; 
+            background: #121212; color: white; 
+            font-family: 'Segoe UI', Helvetica, sans-serif; 
+            height: 100vh; overflow: hidden; 
+            box-sizing: border-box; 
+            display: flex; flex-direction: column;
+        }
+
+        /* HEADER */
+        header { 
+            border-bottom: 4px solid #cfaa56; 
+            padding-bottom: 15px; margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: flex-end;
+            flex-shrink: 0; 
+        }
+        h1 { 
+            font-size: 5em; 
+            margin: 0; 
+            color: #f0f0f0; 
+            font-family: 'Didot', 'Times New Roman', serif; 
+            line-height: 0.9;
+        }
+        .sub-header { 
+            color: #cfaa56; 
+            font-size: 2.2em; 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            font-weight: bold;
+        }
+
+        /* LAYOUT CONTAINER */
+        .menu-container {
+            display: flex;
+            gap: 80px; 
+            flex-grow: 1;
+            height: 100%;
+        }
+
+        /* Columns */
+        .menu-col {
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 40px; 
+        }
+        
+        .hidden-col { display: none; }
+
+        /* SECTIONS */
+        .menu-section { margin-bottom: 20px; }
+        
+        .section-title {
+            font-size: 3.2em; 
+            color: #cfaa56;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-family: 'Didot', serif;
+        }
+
+        /* CARDS */
+        .menu-item {
+            padding: 10px 0;
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+
+        .item-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end; 
+        }
+        
+        .item-name { 
+            font-size: 2.8em; 
+            font-weight: 700; 
+            line-height: 1.1;
+        }
+        
+        .item-price { 
+            font-size: 3em; 
+            color: #cfaa56; 
+            font-weight: bold; 
+            margin-left: 20px;
+        }
+        
+        .item-desc { 
+            font-size: 1.8em; 
+            color: #bbb; 
+            font-style: italic; 
+            margin-top: 10px; 
+            line-height: 1.3;
+        }
+
+        /* UTILS */
+        .loading { font-size: 3em; color: #666; text-align: center; margin-top: 150px; }
+        .full-width { text-align: center; margin-top: 100px; font-size: 4em; color: #444; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Jimmy's Lakeside Pizza</h1>
+        <div class="sub-header">Specials this Week</div>
+    </header>
+
+    <div class="menu-container" id="menu-board">
+        <div class="loading">Loading Menu...</div>
+    </div>
+
+<script>
+    const API_URL = 'menu_proxy.php';
+
+    async function init() {
+        try {
+            const req = await fetch(API_URL);
+            if (!req.ok) throw new Error("API Error");
+            const data = await req.json();
+            render(data.values || []); 
+        } catch (e) {
+            console.error(e);
+            document.getElementById('menu-board').innerHTML = 
+                `<div class="loading">Menu Unavailable</div>`;
+        }
+    }
+
+    function render(rows) {
+        const container = document.getElementById('menu-board');
+        container.innerHTML = '';
+
+        // 1. Sort items into buckets
+        const lunch = [];
+        const soups = [];
+        const apps = [];
+        const entrees = [];
+
+        rows.forEach(row => {
+            // [0]Category, [1]Name, [2]Price, [3]Description
+            const category = (row[0] || "").trim().toLowerCase();
+            if (!row[1]) return;
+
+            const item = {
+                name: row[1],
+                price: cleanPrice(row[2]),
+                desc: row[3] || ""
+            };
+
+            if (category === 'lunch') lunch.push(item);
+            else if (category === 'soup') soups.push(item);
+            else if (category === 'appetizer') apps.push(item);
+            else if (category === 'entree') entrees.push(item);
+        });
+
+        // 2. Check content availability
+        const hasLunch = lunch.length > 0;
+        const hasSoups = soups.length > 0;
+        const hasApps = apps.length > 0;
+        const hasEntrees = entrees.length > 0;
+        
+        // Left column handles Lunch + Starters
+        const hasLeftContent = hasLunch || hasSoups || hasApps;
+
+        // 3. Handle Empty Menu
+        if (!hasLeftContent && !hasEntrees) {
+            container.innerHTML = `<div class="full-width">Please ask your server for this week's specials.</div>`;
+            return;
+        }
+
+        // 4. Build HTML Layout
+        let html = '';
+
+        // LEFT COLUMN (Lunch, Soups, Apps)
+        const leftClass = hasLeftContent ? 'menu-col' : 'menu-col hidden-col';
+        
+        html += `<div class="${leftClass}">`;
+        if (hasLunch) {
+            html += `
+                <div class="menu-section">
+                    <div class="section-title">Lunch Specials</div>
+                    ${generateList(lunch)}
+                </div>`;
+        }
+        if (hasSoups) {
+            html += `
+                <div class="menu-section">
+                    <div class="section-title">Soups</div>
+                    ${generateList(soups)}
+                </div>`;
+        }
+        if (hasApps) {
+            html += `
+                <div class="menu-section">
+                    <div class="section-title">Appetizers</div>
+                    ${generateList(apps)}
+                </div>`;
+        }
+        html += `</div>`; // End Left Col
+
+        // RIGHT COLUMN (Entrees)
+        const rightClass = hasEntrees ? 'menu-col' : 'menu-col hidden-col';
+        
+        html += `<div class="${rightClass}">`;
+        if (hasEntrees) {
+            html += `
+                <div class="menu-section">
+                    <div class="section-title">Entrees</div>
+                    ${generateList(entrees)}
+                </div>`;
+        }
+        html += `</div>`; // End Right Col
+
+        container.innerHTML = html;
+    }
+
+    function generateList(items) {
+        return items.map(item => `
+            <div class="menu-item">
+                <div class="item-header">
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-price">${item.price}</span>
+                </div>
+                ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
+            </div>
+        `).join('');
+    }
+
+    function cleanPrice(p) {
+        if (!p) return "";
+        p = p.toString().trim();
+        if (!p.startsWith('$') && !isNaN(parseFloat(p))) return '$' + p;
+        return p;
+    }
+
+    init();
+</script>
+</body>
+</html>
