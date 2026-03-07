@@ -16,6 +16,7 @@
         <div class="line" id="line3"></div>
     </div>
 
+    <script src="js/goboard.js"></script>
     <script>
         let messagesList = [];
         let currentIndex = 0;
@@ -38,7 +39,6 @@
                 if (data.values && data.values.length > 0) {
                     messagesList = data.values;
 
-                    // If we just loaded for the first time, start the loop immediately
                     if (!displayTimer) {
                         currentIndex = 0;
                         showNextMessage();
@@ -58,24 +58,20 @@
             }
 
             if (!messagesList || messagesList.length === 0) {
-                // Keep trying to retry if data is empty or hasn't loaded
                 displayTimer = setTimeout(showNextMessage, 5000);
                 return;
             }
 
-            // Ensure index is within bounds (e.g., if array shrank during refresh)
             if (currentIndex >= messagesList.length) {
                 currentIndex = 0;
             }
 
             const row = messagesList[currentIndex];
-            const firstCell = (row[0] || '').trim();
 
             const logoEl = document.getElementById('logo');
             const lines = ['line1', 'line2', 'line3'];
 
-            if (firstCell === '<LOGO>') {
-                // Hide text lines, show logo
+            if (isLogoMode(row[0])) {
                 lines.forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.style.display = 'none';
@@ -90,16 +86,10 @@
             }
 
             // Parse duration from column 4 (index 3). Fallback to 10s if invalid.
-            let durationSeconds = 10;
-            if (row.length > 3 && row[3]) {
-                const parsed = parseFloat(row[3]);
-                if (!isNaN(parsed) && parsed > 0) {
-                    durationSeconds = parsed;
-                }
-            }
+            let durationSeconds = parseDuration(row[3], 10);
 
             // Move to the next index for the next cycle
-            currentIndex = (currentIndex + 1) % messagesList.length;
+            currentIndex = calculateNextIndex(currentIndex, messagesList.length);
 
             displayTimer = setTimeout(showNextMessage, durationSeconds * 1000);
         }
@@ -114,7 +104,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchSignData();
-            // Refetch data every 15 minutes (900000 ms) in the background
             setInterval(fetchSignData, 15 * 60 * 1000);
         });
     </script>

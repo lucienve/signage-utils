@@ -33,9 +33,10 @@ The system relies on a "hub and spoke" model where the displays (clients) make r
 *   **Data Source**: Google Sheets API (Tab: `Menu`, Range: `A2:D`).
 *   **Caching**: 15-minute cache (`menu_cache.json`).
 
-### 4. GoBoard Dashboard (`goboard.html`, `goboard.css`, `goboard_proxy.php`)
-*   **Purpose**: Displays up to 3 lines of high-visibility text.
-*   **Frontend**: `goboard.html` dynamically fetches data and hides empty lines to maintain vertical centering. It features a 15-minute refresh interval and uses `?clear` to force a cache clear.
+### 4. GoBoard Dashboard (`goboard.html`, `js/goboard.js`, `goboard.css`, `goboard_proxy.php`)
+*   **Purpose**: Displays up to 3 lines of high-visibility text or a centered image logo.
+*   **Frontend**: `goboard.html` acts as the DOM rendering shell, while `js/goboard.js` drives the state management. It infinitely loops through an array of messages, observing custom per-message float durations from Column D. If a duration is unset or invalid, it returns a 10-second default. Passing `?clear` to the URL forces a cache clear on the backend.
+*   **Logo Support**: If a user enters `<LOGO>` exactly into Column 1, the text fields collapse and `logo.png` is displayed centered on the screen.
 *   **Backend**: `goboard_proxy.php` fetches text from a Google Sheet.
 *   **Data Source**: Google Sheets API (Tab: `GoBoard`, Range: `A2:D`).
 *   **Caching**: 15-minute cache (`goboard_cache.json`).
