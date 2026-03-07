@@ -19,11 +19,10 @@
         async function fetchSignData() {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
-                const clearCache = urlParams.get('clear_cache');
 
                 let fetchUrl = 'goboard_proxy.php';
-                if (clearCache === '1') {
-                    fetchUrl += '?clear_cache=1';
+                if (urlParams.has('clear')) {
+                    fetchUrl += '?clear';
                 }
 
                 const response = await fetch(fetchUrl);

@@ -13,8 +13,8 @@ $range = 'GoBoard!A2:D2'; // Tab Name + Columns
 $cache_file = 'goboard_cache.json';
 $cache_time = 900; // 15 Minutes
 
-// If clear_cache is requested, delete the existing cache file
-if (isset($_GET['clear_cache']) && $_GET['clear_cache'] == '1') {
+// If clear cache is requested, delete the existing cache file
+if (isset($_GET['clear'])) {
     if (file_exists($cache_file)) {
         unlink($cache_file);
     }
