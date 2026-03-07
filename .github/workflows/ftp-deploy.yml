@@ -25,7 +25,7 @@ jobs:
           server-dir: /public_html/signage/
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
-          dry-run: true
+          dry-run: false
           log-level: verbose
           exclude: |
             **/.git*
