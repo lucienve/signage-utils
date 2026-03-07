@@ -1,57 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Gold Key Events - Billboard</title>
-    <style>
-        body { 
-            margin: 0; padding: 30px; 
-            background: #000; color: white; 
-            font-family: 'Segoe UI', sans-serif; 
-            height: 100vh; overflow: hidden; 
-            display: flex; flex-direction: column;
-        }
-
-        header { 
-            border-bottom: 3px solid #4facfe; 
-            padding-bottom: 15px; margin-bottom: 20px;
-        }
-        h1 { font-size: 4em; margin: 0; font-weight: bold; letter-spacing: 2px; }
-
-        #event-list {
-            display: flex; flex-direction: column; gap: 20px; /* Reduced gap slightly to fit location */
-            flex-grow: 1;
-        }
-
-        .event-card {
-            background: #222;
-            padding: 20px 40px;
-            border-left: 20px solid #4facfe;
-            border-radius: 10px;
-            display: flex; align-items: center;
-        }
-
-        /* GIANT DATE BOX */
-        .event-date-box {
-            text-align: center; width: 180px;
-            padding-right: 40px; border-right: 2px solid #555;
-            flex-shrink: 0;
-        }
-        .date-day { font-size: 1.8em; color: #aaa; text-transform: uppercase; }
-        .date-num { font-size: 5em; font-weight: 800; line-height: 1; color: #fff; }
-
-        /* GIANT DETAILS */
-        .event-details { padding-left: 40px; display: flex; flex-direction: column; justify-content: center; }
-        .event-title { font-size: 3.2em; font-weight: 700; line-height: 1.1; margin-bottom: 10px; }
-        
-        /* Time & Location Row */
-        .event-meta { display: flex; flex-direction: column; gap: 5px; }
-        .event-time { font-size: 2em; color: #4facfe; font-weight: 500; }
-        .event-loc { font-size: 1.6em; color: #888; display: flex; align-items: center; gap: 10px; }
-
-        .no-events { text-align: center; font-size: 3em; color: #666; margin-top: 150px; }
-    </style>
+    <link rel="stylesheet" href="events.css">
 </head>
+
 <body>
 
     <header>
@@ -62,50 +17,50 @@
         <div class="no-events">Loading...</div>
     </div>
 
-<script>
-    const API_URL = 'calendar_proxy.php';
+    <script>
+        const API_URL = 'events_proxy.php';
 
-    async function init() {
-        try {
-            const req = await fetch(API_URL);
-            if (!req.ok) throw new Error("API Error");
-            const data = await req.json();
-            render(data.items || []);
-        } catch (e) {
-            document.getElementById('event-list').innerHTML = `<div class="no-events">No Events Loaded</div>`;
-        }
-    }
-
-    function render(events) {
-        const container = document.getElementById('event-list');
-        container.innerHTML = '';
-
-        if (events.length === 0) {
-            container.innerHTML = '<div class="no-events">No events this week.</div>';
-            return;
+        async function init() {
+            try {
+                const req = await fetch(API_URL);
+                if (!req.ok) throw new Error("API Error");
+                const data = await req.json();
+                render(data.items || []);
+            } catch (e) {
+                document.getElementById('event-list').innerHTML = `<div class="no-events">No Events Loaded</div>`;
+            }
         }
 
-        // Show MAX 3 events
-        events.slice(0, 3).forEach(evt => {
-            const title = evt.summary;
-            let start = evt.start.dateTime || evt.start.date;
-            let isAllDay = !evt.start.dateTime;
-            const dateObj = new Date(start);
+        function render(events) {
+            const container = document.getElementById('event-list');
+            container.innerHTML = '';
 
-            const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' }); 
-            const dayNum = dateObj.getDate(); 
-            
-            // Location Logic
-            let rawLoc = evt.location || "Gold Key";
-            // Clean simple locations (e.g. "Lounge, 123 Main St" -> "Lounge")
-            let location = rawLoc.split(',')[0]; 
-
-            let timeStr = "All Day";
-            if (!isAllDay) {
-                timeStr = dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).replace(' M','').toLowerCase();
+            if (events.length === 0) {
+                container.innerHTML = '<div class="no-events">No events this week.</div>';
+                return;
             }
 
-            const html = `
+            // Show MAX 3 events
+            events.slice(0, 3).forEach(evt => {
+                const title = evt.summary;
+                let start = evt.start.dateTime || evt.start.date;
+                let isAllDay = !evt.start.dateTime;
+                const dateObj = new Date(start);
+
+                const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+                const dayNum = dateObj.getDate();
+
+                // Location Logic
+                let rawLoc = evt.location || "Gold Key";
+                // Clean simple locations (e.g. "Lounge, 123 Main St" -> "Lounge")
+                let location = rawLoc.split(',')[0];
+
+                let timeStr = "All Day";
+                if (!isAllDay) {
+                    timeStr = dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).replace(' M', '').toLowerCase();
+                }
+
+                const html = `
                 <div class="event-card">
                     <div class="event-date-box">
                         <div class="date-day">${dayName}</div>
@@ -120,10 +75,11 @@
                     </div>
                 </div>
             `;
-            container.innerHTML += html;
-        });
-    }
-    init();
-</script>
+                container.innerHTML += html;
+            });
+        }
+        init();
+    </script>
 </body>
+
 </html>

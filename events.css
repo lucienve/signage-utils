@@ -1,0 +1,106 @@
+body {
+    margin: 0;
+    padding: 30px;
+    background: #000;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    border-bottom: 3px solid #4facfe;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 4em;
+    margin: 0;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+#event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Reduced gap slightly to fit location */
+    flex-grow: 1;
+}
+
+.event-card {
+    background: #222;
+    padding: 20px 40px;
+    border-left: 20px solid #4facfe;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}
+
+/* GIANT DATE BOX */
+.event-date-box {
+    text-align: center;
+    width: 180px;
+    padding-right: 40px;
+    border-right: 2px solid #555;
+    flex-shrink: 0;
+}
+
+.date-day {
+    font-size: 1.8em;
+    color: #aaa;
+    text-transform: uppercase;
+}
+
+.date-num {
+    font-size: 5em;
+    font-weight: 800;
+    line-height: 1;
+    color: #fff;
+}
+
+/* GIANT DETAILS */
+.event-details {
+    padding-left: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.event-title {
+    font-size: 3.2em;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+/* Time & Location Row */
+.event-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.event-time {
+    font-size: 2em;
+    color: #4facfe;
+    font-weight: 500;
+}
+
+.event-loc {
+    font-size: 1.6em;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.no-events {
+    text-align: center;
+    font-size: 3em;
+    color: #666;
+    margin-top: 150px;
+}

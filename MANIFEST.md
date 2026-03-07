@@ -12,11 +12,11 @@ The system relies on a "hub and spoke" model where the displays (clients) make r
 ### Coding Conventions
 *   **PHP Typing**: All new and modified PHP files must declare strict types (`declare(strict_types=1);` at the top). Functions must use native parameter type hints (e.g. `string $url`) and include standard PHPDoc blocks for documentation.
 
-### 1. Events Calendar (`events.html` & `calendar_proxy.php`)
+### 1. Events Calendar (`events.html` & `events_proxy.php`)
 *   **Purpose**: Displays the next 3 upcoming events.
 *   **Frontend**: `events.html` requests data on load. It formats the date, time, and location (cleaning up verbose location strings).
-*   **Backend**: `calendar_proxy.php` fetches events from a public Google Calendar.
-*   **Caching**: 1-hour cache (`calendar_cache.json`).
+*   **Backend**: `events_proxy.php` fetches events from a public Google Calendar.
+*   **Caching**: 1-hour cache (`events_cache.json`).
 
 ### 2. Garbage Day Schedule (`garbage_day.html` & `garbage_day_proxy.php`)
 *   **Purpose**: Displays the next garbage pickup day. Emphasizes delays due to standard holidays or manual alerts.
@@ -43,7 +43,7 @@ The system relies on a "hub and spoke" model where the displays (clients) make r
 *   **Proxies**: All external API calls use a shared `proxy_helper.php` library that standardizes API requests, caching mechanisms, and error routing.
     *   `weather_proxy.php`: Proxies a local WeatherFlow Tempest station (Station ID: `68285`). Caches for 10 minutes (`tempest_cache.json`).
     *   `purpleair_proxy.php`: Proxies a PurpleAir sensor (Sensor Index: `182513`). Caches for 5 minutes (`purpleair_cache.json`). The frontend calculates the official AQI value from raw PM2.5 readings.
-    *   `calendar_proxy.php`: Proxies events from the public Google Calendar.
+    *   `events_proxy.php`: Proxies events from the public Google Calendar.
     *   `menu_proxy.php`: Proxies menu items from a designated Google Sheet.
     *   `garbage_day_proxy.php`: Performs standard holiday calculations and proxies Google Sheets for overrides, processing and returning the combined data payload for the frontend.
 ## Requirements
@@ -53,7 +53,7 @@ The system relies on a "hub and spoke" model where the displays (clients) make r
     *   A web server (Apache/Nginx) configured to run **PHP 8.1 (`ea-php81`)**.
     *   PHP `cURL` extension must be enabled for proxy scripts to function.
 2.  **File Permissions**: 
-    *   The web server must have write permissions to the deployment directory to create and update the local JSON cache files (e.g., `calendar_cache.json`, `menu_cache.json`, etc.).
+    *   The web server must have write permissions to the deployment directory to create and update the local JSON cache files (e.g., `events_cache.json`, `menu_cache.json`, etc.).
 3.  **Displays**:
     *   The digital signage software used is **PiSignage** (www.pisignage.com).
     *   Displays have a fixed resolution of **1920x1080 pixels** (16:9 aspect ratio).

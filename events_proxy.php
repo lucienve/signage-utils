@@ -9,7 +9,7 @@ require_once 'proxy_helper.php';
 // ==========================================
 $api_key = GOOGLE_API_KEY;
 $calendar_id = GOOGLE_CALENDAR_ID; // Gold Key Public Calendar
-$cache_file = 'calendar_cache.json';
+$cache_file = 'events_cache.json';
 $cache_time = 3600; // 1 Hour Cache
 // ==========================================
 
