@@ -1,76 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Garbage Schedule</title>
-    <style>
-        body { 
-            margin: 0; padding: 0; 
-            background: #1a1a1a; color: white; 
-            font-family: 'Segoe UI', sans-serif; 
-            height: 100vh; overflow: hidden; 
-            display: flex; flex-direction: column;
-        }
-
-        /* HEADER */
-        header { 
-            padding: 30px 40px;
-            border-bottom: 4px solid #444; 
-            display: flex; justify-content: space-between; align-items: center;
-            background: #000;
-        }
-        h1 { font-size: 3.5em; margin: 0; text-transform: uppercase; color: #bbb; letter-spacing: 2px;}
-
-        /* MAIN CONTENT */
-        .container {
-            flex: 1;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            text-align: center;
-        }
-
-        /* STATUS BOX */
-        .day-display {
-            font-size: 15em;
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        .date-display {
-            font-size: 4em;
-            color: #ddd;
-            margin-bottom: 50px;
-        }
-
-        /* DELAY MESSAGE */
-        .delay-msg {
-            background: #d35400; /* Burnt Orange */
-            color: white;
-            padding: 10px 40px;
-            font-size: 2.5em;
-            border-radius: 50px;
-            display: none; /* Hidden by default */
-            animation: pulse 2s infinite;
-        }
-
-        .note {
-            position: absolute; bottom: 30px;
-            font-size: 1.5em; color: #666;
-        }
-
-        /* COLORS */
-        .c-normal { color: #68e143; text-shadow: 0 0 30px rgba(104, 225, 67, 0.3); } /* Green */
-        .c-delayed { color: #f39c12; text-shadow: 0 0 30px rgba(243, 156, 18, 0.3); } /* Orange */
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-    </style>
+    <link rel="stylesheet" href="garbage_day.css">
 </head>
+
 <body>
 
     <header>
@@ -80,7 +16,7 @@
     <div class="container">
         <div id="day-val" class="day-display">--</div>
         <div id="date-val" class="date-display">Loading...</div>
-        
+
         <div id="delay-box" class="delay-msg">
             ⚠️ Delayed for <span id="reason-val">Holiday</span>
         </div>
@@ -88,41 +24,42 @@
         <div class="note" id="note-val"></div>
     </div>
 
-<script>
-    // UPDATED PROXY FILENAME
-    const API_URL = 'garbage_day_proxy.php';
+    <script>
+        // UPDATED PROXY FILENAME
+        const API_URL = 'garbage_day_proxy.php';
 
-    async function init() {
-        try {
-            const req = await fetch(API_URL);
-            const data = await req.json();
-            render(data);
-        } catch(e) {
-            document.getElementById('date-val').innerText = "Offline";
+        async function init() {
+            try {
+                const req = await fetch(API_URL);
+                const data = await req.json();
+                render(data);
+            } catch (e) {
+                document.getElementById('date-val').innerText = "Offline";
+            }
         }
-    }
 
-    function render(data) {
-        const dayEl = document.getElementById('day-val');
-        const boxEl = document.getElementById('delay-box');
+        function render(data) {
+            const dayEl = document.getElementById('day-val');
+            const boxEl = document.getElementById('delay-box');
 
-        // 1. Set Text
-        dayEl.innerText = data.day_name;
-        document.getElementById('date-val').innerText = data.pickup_date;
-        document.getElementById('note-val').innerText = data.instructions;
+            // 1. Set Text
+            dayEl.innerText = data.day_name;
+            document.getElementById('date-val').innerText = data.pickup_date;
+            document.getElementById('note-val').innerText = data.instructions;
 
-        // 2. Handle Color & Warning
-        if (data.is_delayed) {
-            dayEl.className = "day-display c-delayed"; // Orange
-            boxEl.style.display = "inline-block";      // Show Warning
-            document.getElementById('reason-val').innerText = data.reason;
-        } else {
-            dayEl.className = "day-display c-normal";  // Green
-            boxEl.style.display = "none";
+            // 2. Handle Color & Warning
+            if (data.is_delayed) {
+                dayEl.className = "day-display c-delayed"; // Orange
+                boxEl.style.display = "inline-block";      // Show Warning
+                document.getElementById('reason-val').innerText = data.reason;
+            } else {
+                dayEl.className = "day-display c-normal";  // Green
+                boxEl.style.display = "none";
+            }
         }
-    }
 
-    init();
-</script>
+        init();
+    </script>
 </body>
+
 </html>
