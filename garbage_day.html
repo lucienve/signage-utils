@@ -25,12 +25,15 @@
     </div>
 
     <script>
-        // UPDATED PROXY FILENAME
-        const API_URL = 'garbage_day_proxy.php';
-
         async function init() {
             try {
-                const req = await fetch(API_URL);
+                const urlParams = new URLSearchParams(window.location.search);
+                let fetchUrl = 'garbage_day_proxy.php';
+                if (urlParams.has('clear')) {
+                    fetchUrl += '?clear';
+                }
+
+                const req = await fetch(fetchUrl);
                 const data = await req.json();
                 render(data);
             } catch (e) {

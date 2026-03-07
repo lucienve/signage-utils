@@ -23,11 +23,15 @@
 
     <script src="js/menu.js"></script>
     <script>
-        const API_URL = 'menu_proxy.php';
-
         async function init() {
             try {
-                const req = await fetch(API_URL);
+                const urlParams = new URLSearchParams(window.location.search);
+                let fetchUrl = 'menu_proxy.php';
+                if (urlParams.has('clear')) {
+                    fetchUrl += '?clear';
+                }
+
+                const req = await fetch(fetchUrl);
                 if (!req.ok) throw new Error("API Error");
                 const data = await req.json();
                 render(data.values || []);

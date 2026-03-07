@@ -14,6 +14,13 @@ $GOOGLE_SHEET_ID = GOOGLE_SHEET_ID;
 $cache_file = 'garbage_cache.json'; // Added cache file for consistency
 $cache_time = 3600; // 1 Hour
 
+// If clear cache is requested, delete the existing cache file
+if (isset($_GET['clear'])) {
+    if (file_exists($cache_file)) {
+        unlink($cache_file);
+    }
+}
+
 // ==========================================
 // 1. FETCH OVERRIDE DATA (Google Sheet)
 // ==========================================
