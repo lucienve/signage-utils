@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // garbage_day_proxy.php
 header('Content-Type: application/json');
 require_once 'signage_config.php';

@@ -9,6 +9,9 @@ The system relies on a "hub and spoke" model where the displays (clients) make r
 
 ## Architecture & Code Structure
 
+### Coding Conventions
+*   **PHP Typing**: All new and modified PHP files must declare strict types (`declare(strict_types=1);` at the top). Functions must use native parameter type hints (e.g. `string $url`) and include standard PHPDoc blocks for documentation.
+
 ### 1. Events Calendar (`events.html` & `calendar_proxy.php`)
 *   **Purpose**: Displays the next 3 upcoming events.
 *   **Frontend**: `events.html` requests data on load. It formats the date, time, and location (cleaning up verbose location strings).

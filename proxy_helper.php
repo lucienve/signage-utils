@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * proxy_helper.php
  * 
@@ -7,7 +9,17 @@
  * across all digital signage endpoints.
  */
 
-function fetch_with_cache($url, $cache_file, $cache_time, $headers = [], $return_only = false)
+/**
+ * Fetches data from an API and caches it.
+ *
+ * @param string $url The API URL to fetch.
+ * @param string $cache_file Path to the cache file.
+ * @param int $cache_time Cache validity time in seconds.
+ * @param array<string> $headers Optional HTTP headers for cURL.
+ * @param bool $return_only If true, returns the data instead of echoing it.
+ * @return string|bool Returns string data, boolean false on error/failure. Note: may exit directly.
+ */
+function fetch_with_cache(string $url, string $cache_file, int $cache_time, array $headers = [], bool $return_only = false)
 {
     // 1. Serve Cache if fresh
     if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time)) {
@@ -72,5 +84,6 @@ function fetch_with_cache($url, $cache_file, $cache_time, $headers = [], $return
     header('Content-Type: application/json');
     header('X-Source: Live API');
     echo $data;
+    return true;
 }
 ?>

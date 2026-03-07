@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once 'signage_config.php';
 require_once 'proxy_helper.php';
 
