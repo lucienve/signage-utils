@@ -1,0 +1,39 @@
+name: Deploy via FTP
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Deploy:
+    name: Deploy to Web Host
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          server-dir: /public_html/foo/
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          dry-run: true
+          log-level: verbose
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            tests/**
+            **/.env
+            **/phpunit.xml
+            **/package.json
+            **/package-lock.json
+            **/node_modules/**
+            .ftpignore
+            LICENSE
+            MANIFEST.md
+            **/composer.*

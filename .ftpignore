@@ -1,0 +1,14 @@
+.git/
+.gitignore
+.github/
+tests/
+.env
+phpunit.xml
+package.json
+package-lock.json
+node_modules/
+.ftpignore
+LICENSE
+MANIFEST.md
+composer.json
+composer.lock

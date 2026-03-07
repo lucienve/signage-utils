@@ -62,7 +62,11 @@ The system relies on a "hub and spoke" model where the displays (clients) make r
     *   The scripts are hosted on **https://www.goldkeyestates.org**.
     *   A web server (Apache/Nginx) configured to run **PHP 8.1 (`ea-php81`)**.
     *   PHP `cURL` extension must be enabled for proxy scripts to function.
-2.  **File Permissions**: 
+2.  **Deployment**:
+    *   Deployment is automated via a **GitHub Actions** workflow (`.github/workflows/ftp-deploy.yml`).
+    *   Pushing to the `main` branch triggers an FTP sync to the remote server using the credentials stored in GitHub Secrets (`FTP_HOST`, `FTP_USER`, `FTP_PASS`).
+    *   Files related solely to testing and the development environment (e.g., `tests/`, `.github/`, `.env`) are explicitly excluded from deployment via the `.ftpignore` file (and action config).
+3.  **File Permissions**: 
     *   The web server must have write permissions to the deployment directory to create and update the local JSON cache files (e.g., `events_cache.json`, `menu_cache.json`, etc.).
 3.  **Displays**:
     *   The digital signage software used is **PiSignage** (www.pisignage.com).
