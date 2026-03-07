@@ -1,51 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Gold Key Weather Board</title>
     <style>
-        body { 
-            margin: 0; padding: 40px; 
-            background: #1a1a1a; color: white; 
-            font-family: 'Segoe UI', sans-serif; 
-            height: 100vh; overflow: hidden; 
-            box-sizing: border-box; 
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #1a1a1a;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            box-sizing: border-box;
         }
-        h1 { font-size: 3em; margin: 0 0 20px 0; border-bottom: 2px solid #444; padding-bottom: 20px; }
-        
-        /* Views */
-        .view { display: none; height: 100%; }
-        .visible { display: block; }
 
-        /* Current Weather Styles */
-        #current-temp { font-size: 12em; font-weight: bold; margin: 0; line-height: 1; }
-        #current-detail { font-size: 4em; color: #aaa; }
-        .grid-row { display: flex; gap: 50px; margin-top: 40px; }
-        .stat-box { background: #333; padding: 20px; border-radius: 15px; flex: 1; text-align: center; }
-        .stat-label { font-size: 1.5em; color: #888; display: block; }
-        .stat-val { font-size: 3em; font-weight: bold; }
+        h1 {
+            font-size: 3em;
+            margin: 0 0 20px 0;
+            border-bottom: 2px solid #444;
+            padding-bottom: 20px;
+        }
+
+        /* Views */
+        .view {
+            display: none;
+            height: 100%;
+        }
+
+        .visible {
+            display: block;
+        }
 
         /* FORECAST Styles */
-        .forecast-container { display: flex; gap: 20px; height: 85%; }
-        
-        .period-card { 
-            flex: 1; 
-            background: #333; 
-            border-radius: 15px; 
-            padding: 20px; 
-            text-align: center; 
-            display: flex; 
-            flex-direction: column; 
+        .forecast-container {
+            display: flex;
+            gap: 20px;
+            height: 85%;
+        }
+
+        .period-card {
+            flex: 1;
+            background: #333;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
             /* justify-content: space-between; */
             position: relative;
             overflow: hidden;
         }
 
-        .period-card.is-night { background: #101c2e; border: 1px solid #2c3e50; }
-        
+        .period-card.is-night {
+            background: #101c2e;
+            border: 1px solid #2c3e50;
+        }
+
         /* Top Section (Expands to fill space) */
         .period-top {
-            flex-grow: 1; /* Takes all available space */
+            flex-grow: 1;
+            /* Takes all available space */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -53,63 +69,154 @@
             width: 100%;
         }
 
-        .period-name { font-size: 2.2em; color: #4facfe; margin-bottom: 10px; font-weight: bold; width: 100%; }
-        .is-night .period-name { color: #8ca6db; } 
+        .period-name {
+            font-size: 2.2em;
+            color: #4facfe;
+            margin-bottom: 10px;
+            font-weight: bold;
+            width: 100%;
+        }
 
-        .period-icon { width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.1); margin-bottom: 5px; }
+        .is-night .period-name {
+            color: #8ca6db;
+        }
 
-        .period-temp { font-size: 6em; font-weight: bold; margin: 0; line-height: 1; }
-        
-        .period-rain { font-size: 1.8em; color: #6dd5fa; font-weight: bold; margin: 10px 0; min-height: 1.2em; }
-        
+        .period-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 5px;
+        }
+
+        .period-temp {
+            font-size: 6em;
+            font-weight: bold;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .period-rain {
+            font-size: 1.8em;
+            color: #6dd5fa;
+            font-weight: bold;
+            margin: 10px 0;
+            min-height: 1.2em;
+        }
+
         /* Made larger since we have more room now */
-        .period-desc { font-size: 2em; color: #ddd; font-weight: 500; margin-bottom: 10px; line-height: 1.1; }
+        .period-desc {
+            font-size: 2em;
+            color: #ddd;
+            font-weight: 500;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
 
-        .period-wind { font-size: 1.2em; color: #888; font-style: italic; margin-bottom: 15px; }
+        .period-wind {
+            font-size: 1.2em;
+            color: #888;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
 
         /* Detailed Forecast (Smaller fixed area) */
-        .period-detailed { 
-            height: 25%; /* Fixed to ~1/4 of card height */
+        .period-detailed {
+            height: 25%;
+            /* Fixed to ~1/4 of card height */
             flex-shrink: 0;
-            font-size: 1.05em; 
-            color: #bbb; 
-            line-height: 1.35; 
-            background: rgba(0,0,0,0.2); 
-            padding: 15px; 
-            border-radius: 8px; 
+            font-size: 1.05em;
+            color: #bbb;
+            line-height: 1.35;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
             width: 100%;
             box-sizing: border-box;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden; /* Clips text if it's absurdly long */
+            overflow: hidden;
+            /* Clips text if it's absurdly long */
         }
 
         /* Alert Styles */
-        .alert-active-bg { background-color: #3e0a0a !important; }
-        .alert-container { display: flex; flex-direction: column; height: 85%; overflow: hidden; position: relative; }
-        .alert-box { background: #d32f2f; color: white; padding: 30px; border-radius: 20px; margin-bottom: 30px; }
-        .alert-header { border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 15px; margin-bottom: 15px; }
-        .alert-title { font-size: 3em; font-weight: bold; text-transform: uppercase; }
-        .alert-meta { font-size: 1.5em; opacity: 0.8; margin-top: 10px;}
-        .alert-content { font-size: 1.8em; line-height: 1.4; white-space: pre-wrap; font-family: 'Courier New', monospace; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 10px; }
-        .scroll-wrapper { animation: auto-scroll 40s linear infinite; }
-        @keyframes auto-scroll { 0% { transform: translateY(0); } 10% { transform: translateY(0); } 100% { transform: translateY(-100%); } }
-        .no-alerts { text-align: center; font-size: 3em; color: #555; margin-top: 20%; }
+        .alert-active-bg {
+            background-color: #3e0a0a !important;
+        }
+
+        .alert-container {
+            display: flex;
+            flex-direction: column;
+            height: 85%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .alert-box {
+            background: #d32f2f;
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .alert-header {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .alert-title {
+            font-size: 3em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .alert-meta {
+            font-size: 1.5em;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        .alert-content {
+            font-size: 1.8em;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .scroll-wrapper {
+            animation: auto-scroll 40s linear infinite;
+        }
+
+        @keyframes auto-scroll {
+            0% {
+                transform: translateY(0);
+            }
+
+            10% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-100%);
+            }
+        }
+
+        .no-alerts {
+            text-align: center;
+            font-size: 3em;
+            color: #555;
+            margin-top: 20%;
+        }
     </style>
 </head>
-<body>
 
-    <div id="view-current" class="view">
-        <h1>Current Conditions (Milford)</h1>
-        <div id="current-temp">--&deg;</div>
-        <div id="current-detail">Loading...</div>
-        <div class="grid-row">
-            <div class="stat-box"><span class="stat-label">Wind</span><span class="stat-val" id="wind-val">--</span></div>
-            <div class="stat-box"><span class="stat-label">Humidity</span><span class="stat-val" id="humid-val">--</span></div>
-            <div class="stat-box"><span class="stat-label">Precip %</span><span class="stat-val" id="precip-val">--</span></div>
-        </div>
-    </div>
+<body>
 
     <div id="view-forecast" class="view">
         <h1>Gold Key Weather Forecast</h1>
@@ -121,56 +228,47 @@
         <div id="alerts-wrapper" class="alert-container"></div>
     </div>
 
-<script>
-    const LAT = 41.323; 
-    const LON = -74.802;
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const viewMode = urlParams.get('view') || 'current';
-    document.getElementById('view-' + viewMode).classList.add('visible');
+    <script>
+        const LAT = 41.323;
+        const LON = -74.802;
 
-    async function initWeather() {
-        try {
-            const pointsReq = await fetch(`https://api.weather.gov/points/${LAT},${LON}`);
-            const pointsData = await pointsReq.json();
-            const forecastUrl = pointsData.properties.forecast;
+        const urlParams = new URLSearchParams(window.location.search);
+        const viewMode = urlParams.get('view') || 'forecast';
+        document.getElementById('view-' + viewMode).classList.add('visible');
 
-            const forecastReq = await fetch(forecastUrl);
-            const forecastData = await forecastReq.json();
-            const periods = forecastData.properties.periods;
+        async function initWeather() {
+            try {
+                const pointsReq = await fetch(`https://api.weather.gov/points/${LAT},${LON}`);
+                const pointsData = await pointsReq.json();
+                const forecastUrl = pointsData.properties.forecast;
 
-            if (viewMode === 'current') renderCurrent(periods[0]);
-            if (viewMode === 'forecast') renderForecast(periods);
-            if (viewMode === 'alerts') renderAlerts(LAT, LON);
+                const forecastReq = await fetch(forecastUrl);
+                const forecastData = await forecastReq.json();
+                const periods = forecastData.properties.periods;
 
-        } catch (e) {
-            console.error("Weather data failed", e);
-            if(document.body.innerText.trim() === "") {
-                document.body.innerHTML = "<h1>Weather Unavailable</h1><p>Check Internet Connection</p>";
+                if (viewMode === 'forecast') renderForecast(periods);
+                if (viewMode === 'alerts') renderAlerts(LAT, LON);
+
+            } catch (e) {
+                console.error("Weather data failed", e);
+                if (document.body.innerText.trim() === "") {
+                    document.body.innerHTML = "<h1>Weather Unavailable</h1><p>Check Internet Connection</p>";
+                }
             }
         }
-    }
 
-    function renderCurrent(current) {
-        document.getElementById('current-temp').innerHTML = current.temperature + '&deg;';
-        document.getElementById('current-detail').innerText = current.shortForecast;
-        document.getElementById('wind-val').innerText = current.windSpeed;
-        document.getElementById('humid-val').innerText = current.relativeHumidity.value + "%";
-        document.getElementById('precip-val').innerText = current.probabilityOfPrecipitation.value ? current.probabilityOfPrecipitation.value + "%" : "0%";
-    }
+        function renderForecast(periods) {
+            const grid = document.getElementById('forecast-grid');
+            const nextThree = periods.slice(0, 3);
 
-    function renderForecast(periods) {
-        const grid = document.getElementById('forecast-grid');
-        const nextThree = periods.slice(0, 3);
+            nextThree.forEach(p => {
+                const isNight = !p.isDaytime;
+                const cardClass = isNight ? 'period-card is-night' : 'period-card';
+                const iconUrl = p.icon;
+                const precipVal = p.probabilityOfPrecipitation.value;
+                const precipHtml = precipVal ? `Chance of Precip: ${precipVal}%` : '';
 
-        nextThree.forEach(p => {
-            const isNight = !p.isDaytime;
-            const cardClass = isNight ? 'period-card is-night' : 'period-card';
-            const iconUrl = p.icon;
-            const precipVal = p.probabilityOfPrecipitation.value;
-            const precipHtml = precipVal ? `Chance of Precip: ${precipVal}%` : '';
-
-            grid.innerHTML += `
+                grid.innerHTML += `
                 <div class="${cardClass}">
                     <div class="period-top">
                         <div class="period-name">${p.name}</div>
@@ -183,30 +281,30 @@
                     <div class="period-detailed">${p.detailedForecast}</div>
                 </div>
             `;
-        });
-    }
+            });
+        }
 
-    async function renderAlerts(lat, lon) {
-        const alertsReq = await fetch(`https://api.weather.gov/alerts/active?point=${lat},${lon}`);
-        const alertsData = await alertsReq.json();
-        const wrapper = document.getElementById('alerts-wrapper');
+        async function renderAlerts(lat, lon) {
+            const alertsReq = await fetch(`https://api.weather.gov/alerts/active?point=${lat},${lon}`);
+            const alertsData = await alertsReq.json();
+            const wrapper = document.getElementById('alerts-wrapper');
 
-        if (alertsData.features.length === 0) {
-            wrapper.innerHTML = '<div class="no-alerts">No Active Alerts for Gold Key Area</div>';
-        } else {
-            document.body.classList.add('alert-active-bg');
-            let htmlContent = '<div class="scroll-wrapper">';
-            
-            alertsData.features.forEach(alert => {
-                const props = alert.properties;
-                const expires = new Date(props.expires).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit'});
-                
-                let fullText = props.description || "";
-                if (props.instruction) {
-                    fullText += "\n\n*** INSTRUCTION ***\n" + props.instruction;
-                }
+            if (alertsData.features.length === 0) {
+                wrapper.innerHTML = '<div class="no-alerts">No Active Alerts for Gold Key Area</div>';
+            } else {
+                document.body.classList.add('alert-active-bg');
+                let htmlContent = '<div class="scroll-wrapper">';
 
-                htmlContent += `
+                alertsData.features.forEach(alert => {
+                    const props = alert.properties;
+                    const expires = new Date(props.expires).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+
+                    let fullText = props.description || "";
+                    if (props.instruction) {
+                        fullText += "\n\n*** INSTRUCTION ***\n" + props.instruction;
+                    }
+
+                    htmlContent += `
                     <div class="alert-box">
                         <div class="alert-header">
                             <div class="alert-title">${props.event}</div>
@@ -215,14 +313,15 @@
                         <div class="alert-content">${fullText}</div>
                     </div>
                 `;
-            });
-            htmlContent += '</div>';
-            wrapper.innerHTML = htmlContent;
+                });
+                htmlContent += '</div>';
+                wrapper.innerHTML = htmlContent;
+            }
         }
-    }
 
-    initWeather();
-    setTimeout(() => window.location.reload(), 600000); 
-</script>
+        initWeather();
+        setTimeout(() => window.location.reload(), 600000); 
+    </script>
 </body>
+
 </html>
