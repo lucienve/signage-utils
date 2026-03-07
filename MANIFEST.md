@@ -59,7 +59,7 @@ The system relies on a "hub and spoke" model where the displays (clients) make r
 ## Requirements
 
 1.  **Environment**: 
-    *   The scripts are hosted on **https://www.goldkeyestates.org**.
+    *   The scripts are hosted on **https://www.goldkeyestates.org/signage/**.
     *   A web server (Apache/Nginx) configured to run **PHP 8.1 (`ea-php81`)**.
     *   PHP `cURL` extension must be enabled for proxy scripts to function.
 2.  **Deployment**:
