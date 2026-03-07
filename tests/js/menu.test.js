@@ -22,6 +22,12 @@ describe('Menu Utility Functions', () => {
         // Expiration is Feb 6th (Tomorrow). Should NOT be expired.
         expect(isMenuExpired("2026-02-06")).toBe(false);
 
+        // Expiration is Feb 4th (Yesterday) but in short format. Should be expired.
+        expect(isMenuExpired("2/4/2026")).toBe(true);
+
+        // Expiration is Feb 6th (Tomorrow) but in short format. Should NOT be expired.
+        expect(isMenuExpired("2/6/2026")).toBe(false);
+
         // Expiration is Feb 5th (Today). Should NOT be expired (expires at midnight).
         expect(isMenuExpired("2026-02-05")).toBe(false);
 

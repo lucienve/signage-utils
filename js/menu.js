@@ -16,8 +16,9 @@ function isMenuExpired(expirationDateString) {
     if (!expirationDateString) return false;
 
     // YYYY-MM-DD strings are parsed as UTC. Instead, append an artificial time 
-    // to force it to parse as the local Date to align with logic below.
-    const parsedDate = new Date(`${expirationDateString}T23:59:59`);
+    // to force it to parse as the local Date to align with logic below. A space 
+    // works better than T for handling standard M/D/YYYY formats.
+    const parsedDate = new Date(`${expirationDateString} 23:59:59`);
     if (isNaN(parsedDate)) return false;
 
     // Obtain the current time correctly mapped to Milford, PA
