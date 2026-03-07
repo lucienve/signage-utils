@@ -19,4 +19,5 @@ npm-debug.log
 vendor/
 composer.phar
 .phpunit.result.cache
+.phpunit.cache/
 tests/php/test_cache.json
