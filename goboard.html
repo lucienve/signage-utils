@@ -10,6 +10,7 @@
 <body>
 
     <div class="sign-container">
+        <img id="logo" src="logo.png" alt="Gold Key Logo">
         <div class="line" id="line1"></div>
         <div class="line" id="line2"></div>
         <div class="line" id="line3"></div>
@@ -68,10 +69,25 @@
             }
 
             const row = messagesList[currentIndex];
+            const firstCell = (row[0] || '').trim();
 
-            updateLine('line1', row[0] || '');
-            updateLine('line2', row[1] || '');
-            updateLine('line3', row[2] || '');
+            const logoEl = document.getElementById('logo');
+            const lines = ['line1', 'line2', 'line3'];
+
+            if (firstCell === '<LOGO>') {
+                // Hide text lines, show logo
+                lines.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
+                if (logoEl) logoEl.style.display = 'block';
+            } else {
+                // Hide logo, show/update text lines
+                if (logoEl) logoEl.style.display = 'none';
+                updateLine('line1', row[0] || '');
+                updateLine('line2', row[1] || '');
+                updateLine('line3', row[2] || '');
+            }
 
             // Parse duration from column 4 (index 3). Fallback to 10s if invalid.
             let durationSeconds = 10;
