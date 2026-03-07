@@ -21,6 +21,7 @@
         <div class="loading">Loading Menu...</div>
     </div>
 
+    <script src="js/menu.js"></script>
     <script>
         const API_URL = 'menu_proxy.php';
 
@@ -42,64 +43,21 @@
             container.innerHTML = '';
 
             // 1. Sort items into buckets
-            const lunch = [];
-            const soups = [];
-            const salads = [];
-            const apps = [];
-            const entrees = [];
-            const desserts = [];
-            let expirationDate = null;
-            let isExpired = false;
-
-            rows.forEach(row => {
-                // [0]Category, [1]Name, [2]Price, [3]Description
-                const category = (row[0] || "").trim().toLowerCase();
-                if (!row[1]) return;
-
-                if (category === 'expiration') {
-                    expirationDate = row[1];
-                    const parsedDate = new Date(expirationDate);
-                    if (!isNaN(parsedDate)) {
-                        // Obtain the current time correctly mapped to Milford, PA
-                        const nowInMilford = new Date(new Date().toLocaleString("en-US", { timeZone: "America/New_York" }));
-
-                        // Treat the parsed date as if it is in Milford's local time as well, and set it to the end of that day.
-                        parsedDate.setHours(23, 59, 59, 999);
-
-                        if (nowInMilford > parsedDate) {
-                            isExpired = true;
-                        }
-                    }
-                    return;
-                }
-
-                const item = {
-                    name: row[1],
-                    price: cleanPrice(row[2]),
-                    desc: row[3] || ""
-                };
-
-                if (category === 'lunch') lunch.push(item);
-                else if (category === 'soup') soups.push(item);
-                else if (category === 'salad') salads.push(item);
-                else if (category === 'appetizer') apps.push(item);
-                else if (category === 'entree') entrees.push(item);
-                else if (category === 'dessert') desserts.push(item);
-            });
+            const cats = categorizeMenuItems(rows);
 
             // Update expiration date if present
             const dateElement = document.getElementById('expiration-date');
             if (dateElement) {
-                dateElement.textContent = expirationDate ? `Valid until ${expirationDate}` : '';
+                dateElement.textContent = cats.expirationDate ? `Valid until ${cats.expirationDate}` : '';
             }
 
             // 2. Check content availability
-            const hasLunch = lunch.length > 0;
-            const hasSoups = soups.length > 0;
-            const hasSalads = salads.length > 0;
-            const hasApps = apps.length > 0;
-            const hasEntrees = entrees.length > 0;
-            const hasDesserts = desserts.length > 0;
+            const hasLunch = cats.lunch.length > 0;
+            const hasSoups = cats.soups.length > 0;
+            const hasSalads = cats.salads.length > 0;
+            const hasApps = cats.apps.length > 0;
+            const hasEntrees = cats.entrees.length > 0;
+            const hasDesserts = cats.desserts.length > 0;
 
             // Left column handles Lunch + Starters
             const hasLeftContent = hasLunch || hasSoups || hasSalads || hasApps;
@@ -108,7 +66,7 @@
             const hasRightContent = hasEntrees || hasDesserts;
 
             // 3. Handle Empty Menu or Expired Menu
-            if ((!hasLeftContent && !hasRightContent) || isExpired) {
+            if ((!hasLeftContent && !hasRightContent) || cats.isExpired) {
                 container.innerHTML = `<div class="full-width">Please ask your server for this week's specials.</div>`;
                 return;
             }
@@ -124,28 +82,28 @@
                 html += `
                 <div class="menu-section">
                     <div class="section-title">Lunch Specials</div>
-                    ${generateList(lunch)}
+                    ${generateList(cats.lunch)}
                 </div>`;
             }
             if (hasSoups) {
                 html += `
                 <div class="menu-section">
                     <div class="section-title">Soups</div>
-                    ${generateList(soups)}
+                    ${generateList(cats.soups)}
                 </div>`;
             }
             if (hasSalads) {
                 html += `
                 <div class="menu-section">
                     <div class="section-title">Salads</div>
-                    ${generateList(salads)}
+                    ${generateList(cats.salads)}
                 </div>`;
             }
             if (hasApps) {
                 html += `
                 <div class="menu-section">
                     <div class="section-title">Appetizers</div>
-                    ${generateList(apps)}
+                    ${generateList(cats.apps)}
                 </div>`;
             }
             html += `</div>`; // End Left Col
@@ -158,14 +116,14 @@
                 html += `
                 <div class="menu-section">
                     <div class="section-title">Entrees</div>
-                    ${generateList(entrees)}
+                    ${generateList(cats.entrees)}
                 </div>`;
             }
             if (hasDesserts) {
                 html += `
                 <div class="menu-section">
                     <div class="section-title">Desserts</div>
-                    ${generateList(desserts)}
+                    ${generateList(cats.desserts)}
                 </div>`;
             }
             html += `</div>`; // End Right Col
@@ -183,13 +141,6 @@
                 ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
             </div>
         `).join('');
-        }
-
-        function cleanPrice(p) {
-            if (!p) return "";
-            p = p.toString().trim();
-            if (!p.startsWith('$') && !isNaN(parseFloat(p))) return '$' + p;
-            return p;
         }
 
         init();

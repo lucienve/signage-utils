@@ -11,6 +11,8 @@ The system relies on a "hub and spoke" model where the displays (clients) make r
 
 ### Coding Conventions
 *   **PHP Typing**: All new and modified PHP files must declare strict types (`declare(strict_types=1);` at the top). Functions must use native parameter type hints (e.g. `string $url`) and include standard PHPDoc blocks for documentation.
+*   **Unit Testing**: Sufficiently complex PHP and JavaScript algorithmic logic should be covered by unit tests. PHP code uses PHPUnit (stored in `tests/php/`) and JavaScript uses Jest (stored in `tests/js/`). For testability, logic housed inside `.html` script tags or procedural `.php` scripts should be extracted into standalone `.js` files or PHP classes respectively.
+*   **Styling**: If the CSS for a particular dashboard or view is sufficiently complex, it should be extracted from the inline `<style>` blocks in the HTML into a separate `.css` stylesheet (e.g., `menu.css`, `weather.css`) and linked appropriately.
 
 ### 1. Events Calendar (`events.html` & `events_proxy.php`)
 *   **Purpose**: Displays the next 3 upcoming events.

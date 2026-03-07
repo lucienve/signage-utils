@@ -10,3 +10,13 @@ signage_config.php
 _agents/
 _agent/
 .gemini/
+
+# Node.js
+node_modules/
+npm-debug.log
+
+# Composer & PHPUnit
+vendor/
+composer.phar
+.phpunit.result.cache
+tests/php/test_cache.json

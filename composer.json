@@ -1,0 +1,12 @@
+{
+    "name": "lucienve/signage-utils",
+    "description": "Signage Utils",
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "classmap": [
+            "tests/"
+        ]
+    }
+}
