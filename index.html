@@ -195,11 +195,16 @@
                 <p class="card-desc">Multi-column menu board of weekly specials.</p>
             </a>
 
-            <a href="goboard.html" class="card">
-                <div class="card-icon">📢</div>
-                <h2 class="card-title">GoBoard</h2>
-                <p class="card-desc">High-visibility rotating messages.</p>
-            </a>
+            <div style="position: relative;" class="card">
+                <a href="goboard.html"
+                    style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; width: 100%;">
+                    <div class="card-icon">📢</div>
+                    <h2 class="card-title">GoBoard</h2>
+                    <p class="card-desc">High-visibility rotating messages.</p>
+                </a>
+                <a href="goboard.html?clear" title="Force Cache Clear"
+                    style="position: absolute; bottom: 8px; right: 12px; font-size: 0.8rem; opacity: 0.3; text-decoration: none; transition: opacity 0.2s;">🔄</a>
+            </div>
 
             <a href="garbage_day.html" class="card">
                 <div class="card-icon">🗑️</div>
@@ -217,6 +222,18 @@
                 <div class="card-icon">🌤️</div>
                 <h2 class="card-title">Live Weather</h2>
                 <p class="card-desc">Gold Key climate conditions, AQI, and wind chill/heat index.</p>
+            </a>
+
+            <a href="weather.html?view=forecast" class="card">
+                <div class="card-icon">🌧️</div>
+                <h2 class="card-title">Weather Forecast</h2>
+                <p class="card-desc">Detailed 7-day National Weather Service forecast.</p>
+            </a>
+
+            <a href="weather.html?view=alerts" class="card">
+                <div class="card-icon">⚠️</div>
+                <h2 class="card-title">Weather Alerts</h2>
+                <p class="card-desc">Active severe weather watches and warnings.</p>
             </a>
         </div>
     </div>
