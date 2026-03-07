@@ -37,7 +37,7 @@ The system relies on a "hub and spoke" model where the displays (clients) make r
 *   **Purpose**: Displays up to 3 lines of high-visibility text.
 *   **Frontend**: `goboard.html` dynamically fetches data and hides empty lines to maintain vertical centering. It features a 15-minute refresh interval and uses `?clear` to force a cache clear.
 *   **Backend**: `goboard_proxy.php` fetches text from a Google Sheet.
-*   **Data Source**: Google Sheets API (Tab: `GoBoard`, Range: `A2:D2`).
+*   **Data Source**: Google Sheets API (Tab: `GoBoard`, Range: `A2:D`).
 *   **Caching**: 15-minute cache (`goboard_cache.json`).
 
 ### 5. Weather Boards (`weather.html`, `weather_live.html`, proxies)

@@ -9,7 +9,7 @@ require_once 'proxy_helper.php';
 // ==========================================
 $api_key = GOOGLE_API_KEY;
 $spreadsheet_id = GOOGLE_SHEET_ID;
-$range = 'GoBoard!A2:D2'; // Tab Name + Columns
+$range = 'GoBoard!A2:D'; // Tab Name + Columns
 $cache_file = 'goboard_cache.json';
 $cache_time = 900; // 15 Minutes
 

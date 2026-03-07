@@ -16,6 +16,10 @@
     </div>
 
     <script>
+        let messagesList = [];
+        let currentIndex = 0;
+        let displayTimer = null;
+
         async function fetchSignData() {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -31,14 +35,57 @@
                 const data = await response.json();
 
                 if (data.values && data.values.length > 0) {
-                    const row = data.values[0];
-                    updateLine('line1', row[0] || '');
-                    updateLine('line2', row[1] || '');
-                    updateLine('line3', row[2] || '');
+                    messagesList = data.values;
+
+                    // If we just loaded for the first time, start the loop immediately
+                    if (!displayTimer) {
+                        currentIndex = 0;
+                        showNextMessage();
+                    }
+                } else {
+                    messagesList = [];
                 }
             } catch (error) {
                 console.error("Error fetching GoBoard data:", error);
             }
+        }
+
+        function showNextMessage() {
+            if (displayTimer) {
+                clearTimeout(displayTimer);
+                displayTimer = null;
+            }
+
+            if (!messagesList || messagesList.length === 0) {
+                // Keep trying to retry if data is empty or hasn't loaded
+                displayTimer = setTimeout(showNextMessage, 5000);
+                return;
+            }
+
+            // Ensure index is within bounds (e.g., if array shrank during refresh)
+            if (currentIndex >= messagesList.length) {
+                currentIndex = 0;
+            }
+
+            const row = messagesList[currentIndex];
+
+            updateLine('line1', row[0] || '');
+            updateLine('line2', row[1] || '');
+            updateLine('line3', row[2] || '');
+
+            // Parse duration from column 4 (index 3). Fallback to 10s if invalid.
+            let durationSeconds = 10;
+            if (row.length > 3 && row[3]) {
+                const parsed = parseFloat(row[3]);
+                if (!isNaN(parsed) && parsed > 0) {
+                    durationSeconds = parsed;
+                }
+            }
+
+            // Move to the next index for the next cycle
+            currentIndex = (currentIndex + 1) % messagesList.length;
+
+            displayTimer = setTimeout(showNextMessage, durationSeconds * 1000);
         }
 
         function updateLine(id, text) {
@@ -51,7 +98,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchSignData();
-            // Fetch every 15 minutes (900000 ms)
+            // Refetch data every 15 minutes (900000 ms) in the background
             setInterval(fetchSignData, 15 * 60 * 1000);
         });
     </script>
