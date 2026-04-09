@@ -99,4 +99,57 @@ class GarbageDayCalculatorTest extends TestCase
         $this->assertEquals("Monday, February 9", $result['pickup_date']);
         $this->assertFalse($result['is_delayed']);
     }
+
+    public function testInvalidDateManualOverrideIsIgnored()
+    {
+        // "Current" time: Feb 4, 2026. Normal pickup would be Feb 9.
+        $currentTime = strtotime('2026-02-04 12:00:00');
+
+        // Provide mock sheet data with garbage text as date
+        $mockSheetData = json_encode([
+            "values" => [
+                ["NOT_A_DATE", "Bad Data"]
+            ]
+        ]);
+
+        $result = $this->calculator->calculate($currentTime, $mockSheetData);
+
+        // Should ignore invalid date and calculate standard pickup for Feb 9
+        $this->assertEquals("Monday, February 9", $result['pickup_date']);
+        $this->assertFalse($result['is_delayed']);
+    }
+
+    public function testEmptyDateManualOverrideIsIgnored()
+    {
+        // "Current" time: Feb 4, 2026. Normal pickup would be Feb 9.
+        $currentTime = strtotime('2026-02-04 12:00:00');
+
+        // Provide mock sheet data with empty string as date
+        $mockSheetData = json_encode([
+            "values" => [
+                ["", "Empty Date"]
+            ]
+        ]);
+
+        $result = $this->calculator->calculate($currentTime, $mockSheetData);
+
+        // Should ignore empty date and calculate standard pickup for Feb 9
+        $this->assertEquals("Monday, February 9", $result['pickup_date']);
+        $this->assertFalse($result['is_delayed']);
+    }
+
+    public function testMalformedJsonManualOverrideIsIgnored()
+    {
+        // "Current" time: Feb 4, 2026. Normal pickup would be Feb 9.
+        $currentTime = strtotime('2026-02-04 12:00:00');
+
+        // Provide malformed JSON
+        $mockSheetData = "{ invalid json }";
+
+        $result = $this->calculator->calculate($currentTime, $mockSheetData);
+
+        // Should ignore malformed JSON and calculate standard pickup for Feb 9
+        $this->assertEquals("Monday, February 9", $result['pickup_date']);
+        $this->assertFalse($result['is_delayed']);
+    }
 }
