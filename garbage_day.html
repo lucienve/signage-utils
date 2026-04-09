@@ -31,6 +31,9 @@
                 let fetchUrl = 'garbage_day_proxy.php';
                 if (urlParams.has('clear')) {
                     fetchUrl += '?clear';
+                    if (urlParams.has('token')) {
+                        fetchUrl += '&token=' + encodeURIComponent(urlParams.get('token'));
+                    }
                 }
 
                 const req = await fetch(fetchUrl);

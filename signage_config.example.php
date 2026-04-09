@@ -2,6 +2,9 @@
 // signage_config.example.php
 // Example configuration file. Copy to signage_config.php and fill in your values.
 
+// General Configurations
+define('CACHE_CLEAR_TOKEN', 'YOUR_CACHE_CLEAR_TOKEN_HERE');
+
 // Google API Configurations
 define('GOOGLE_API_KEY', 'YOUR_GOOGLE_API_KEY_HERE');
 define('GOOGLE_CALENDAR_ID', 'YOUR_GOOGLE_CALENDAR_ID_HERE');

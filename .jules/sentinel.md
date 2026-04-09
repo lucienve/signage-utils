@@ -1,0 +1,5 @@
+
+## 2024-05-18 - Unauthenticated Cache Clearing Vulnerability
+**Vulnerability:** The application allowed an unauthenticated attacker to arbitrarily clear the caching layer (JSON cache files) by merely passing `?clear` to any of the proxy endpoints (`garbage_day_proxy.php`, `goboard_proxy.php`, `menu_proxy.php`). Since this requires file writing operations and bypasses the stale-while-revalidate protection, it could be leveraged as a vector for a Denial of Service (DoS) attack, causing rate limits with downstream APIs.
+**Learning:** The previous implementation checked if the parameter was present but failed to validate the requester's identity or authorization. The frontends were designed with a clickable "refresh" button, encouraging usage without considering the impact if the endpoint were discovered.
+**Prevention:** Always require authentication/authorization for state-changing operations, even seemingly innocuous ones like clearing a cache. A shared secret (token) approach was introduced.

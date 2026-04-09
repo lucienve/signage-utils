@@ -29,6 +29,9 @@
                 let fetchUrl = 'goboard_proxy.php';
                 if (urlParams.has('clear')) {
                     fetchUrl += '?clear';
+                    if (urlParams.has('token')) {
+                        fetchUrl += '&token=' + encodeURIComponent(urlParams.get('token'));
+                    }
                 }
 
                 const response = await fetch(fetchUrl);

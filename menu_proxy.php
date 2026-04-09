@@ -15,6 +15,10 @@ $cache_time = 900; // 15 Minutes
 
 // If clear cache is requested, delete the existing cache file
 if (isset($_GET['clear'])) {
+    if (!isset($_GET['token']) || $_GET['token'] !== CACHE_CLEAR_TOKEN) {
+        http_response_code(403);
+        die(json_encode(["error" => "Invalid or missing cache clear token"]));
+    }
     if (file_exists($cache_file)) {
         unlink($cache_file);
     }
