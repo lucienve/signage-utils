@@ -13,10 +13,18 @@ $range = 'GoBoard!A2:D'; // Tab Name + Columns
 $cache_file = 'goboard_cache.json';
 $cache_time = 900; // 15 Minutes
 
-// If clear cache is requested, delete the existing cache file
+// If clear cache is requested, delete the existing cache file safely
 if (isset($_GET['clear'])) {
     if (file_exists($cache_file)) {
-        unlink($cache_file);
+        try {
+            if (is_writable($cache_file)) {
+                unlink($cache_file);
+            } else {
+                header('X-Cache-Error: Cache file is not writable');
+            }
+        } catch (\Throwable $e) {
+            error_log("Failed to clear cache for $cache_file: " . $e->getMessage());
+        }
     }
 }
 // ==========================================

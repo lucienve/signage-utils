@@ -19,7 +19,7 @@ The architecture consists of:
 - **Garbage Day Schedule:** [garbage_day.html](../garbage_day.html) / [garbage_day_proxy.php](../garbage_day_proxy.php)
 - **Events Calendar:** [events.html](../events.html) / [events_proxy.php](../events_proxy.php)
 - **Live Weather Board:** [weather_live.html](../weather_live.html) / [weather_proxy.php](../weather_proxy.php)
-- **Weather Forecast & Alerts:** [weather.html](../weather.html) (currently queries external API directly)
+- **Weather Forecast & Alerts:** [weather.html](../weather.html) / [nws_forecast_proxy.php](../nws_forecast_proxy.php) & [nws_alerts_proxy.php](../nws_alerts_proxy.php)
 - **Master Admin sheet:** Links to a Google Sheet that controls menu, goboard, and garbage day override data.
 
 ---

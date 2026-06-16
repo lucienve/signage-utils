@@ -20,26 +20,21 @@
     </div>
 
     <script>
-        const LAT = 41.323;
-        const LON = -74.802;
-
         const urlParams = new URLSearchParams(window.location.search);
         const viewMode = urlParams.get('view') || 'forecast';
         document.getElementById('view-' + viewMode).classList.add('visible');
 
         async function initWeather() {
             try {
-                const pointsReq = await fetch(`https://api.weather.gov/points/${LAT},${LON}`);
-                const pointsData = await pointsReq.json();
-                const forecastUrl = pointsData.properties.forecast;
-
-                const forecastReq = await fetch(forecastUrl);
-                const forecastData = await forecastReq.json();
-                const periods = forecastData.properties.periods;
-
-                if (viewMode === 'forecast') renderForecast(periods);
-                if (viewMode === 'alerts') renderAlerts(LAT, LON);
-
+                if (viewMode === 'forecast') {
+                    const forecastReq = await fetch('nws_forecast_proxy.php');
+                    if (!forecastReq.ok) throw new Error("Forecast proxy error");
+                    const forecastData = await forecastReq.json();
+                    const periods = forecastData.properties.periods;
+                    renderForecast(periods);
+                } else if (viewMode === 'alerts') {
+                    await renderAlerts();
+                }
             } catch (e) {
                 console.error("Weather data failed", e);
                 if (document.body.innerText.trim() === "") {
@@ -75,8 +70,9 @@
             });
         }
 
-        async function renderAlerts(lat, lon) {
-            const alertsReq = await fetch(`https://api.weather.gov/alerts/active?point=${lat},${lon}`);
+        async function renderAlerts() {
+            const alertsReq = await fetch('nws_alerts_proxy.php');
+            if (!alertsReq.ok) throw new Error("Alerts proxy error");
             const alertsData = await alertsReq.json();
             const wrapper = document.getElementById('alerts-wrapper');
 
