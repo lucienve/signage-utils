@@ -5,10 +5,16 @@ use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../../proxy_helper.php';
 
+/**
+ * Unit tests for the shared Proxy Helper functionality.
+ */
 class ProxyHelperTest extends TestCase
 {
     private string $cacheFile;
 
+    /**
+     * Sets up the test environment by initializing a temporary cache file path.
+     */
     protected function setUp(): void
     {
         // Define a temporary cache file path
@@ -18,6 +24,9 @@ class ProxyHelperTest extends TestCase
         }
     }
 
+    /**
+     * Cleans up the test environment by removing any temporary cache files.
+     */
     protected function tearDown(): void
     {
         // Clean up
@@ -26,6 +35,9 @@ class ProxyHelperTest extends TestCase
         }
     }
 
+    /**
+     * Tests that fetch_with_cache returns fresh cache contents immediately.
+     */
     public function testFetchWithCacheReturnsFreshCache(): void
     {
         // Setup a dummy cache file "saved" recently

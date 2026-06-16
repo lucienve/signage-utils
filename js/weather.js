@@ -5,10 +5,32 @@
  * Extracted for unit testing and reusability.
  */
 
+/**
+ * Converts Celsius to Fahrenheit.
+ * @param {number} c Temperature in Celsius.
+ * @returns {number} Temperature in Fahrenheit.
+ */
 const toF = (c) => (c * 9 / 5) + 32;
+
+/**
+ * Converts meters per second to miles per hour (rounded to integer).
+ * @param {number} ms Speed in meters per second.
+ * @returns {string} Speed in miles per hour.
+ */
 const toMph = (ms) => (ms * 2.23694).toFixed(0);
+
+/**
+ * Converts millimeters to inches (formatted to two decimal places).
+ * @param {number} mm Length in millimeters.
+ * @returns {string} Length in inches.
+ */
 const toInches = (mm) => (mm * 0.0393701).toFixed(2);
 
+/**
+ * Calculates the US EPA Air Quality Index (AQI) based on PM2.5 concentration.
+ * @param {number|null|undefined} pm The PM2.5 concentration (ug/m3).
+ * @returns {number|string} The calculated AQI value, or "--" if invalid.
+ */
 function calculateAQI(pm) {
     if (pm === undefined || pm === null) return "--";
     if (pm >= 350.5) return calc(pm, 500, 401, 500, 350.5);
@@ -21,6 +43,15 @@ function calculateAQI(pm) {
     return 0;
 }
 
+/**
+ * EPA AQI linear interpolation formula.
+ * @param {number} Cp Observed concentration.
+ * @param {number} Ih AQI value corresponding to BPh.
+ * @param {number} Il AQI value corresponding to BPl.
+ * @param {number} BPh Breakpoint greater than or equal to Cp.
+ * @param {number} BPl Breakpoint less than or equal to Cp.
+ * @returns {number} The interpolated AQI.
+ */
 function calc(Cp, Ih, Il, BPh, BPl) {
     return Math.round(((Ih - Il) / (BPh - BPl)) * (Cp - BPl) + Il);
 }

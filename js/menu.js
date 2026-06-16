@@ -5,6 +5,11 @@
  * Extracted for unit testing and reusability.
  */
 
+/**
+ * Formats a raw price value to ensure it has a dollar sign if it is numeric.
+ * @param {string|number|null} p The raw price input.
+ * @returns {string} The formatted price.
+ */
 function cleanPrice(p) {
     if (!p) return "";
     p = p.toString().trim();
@@ -12,6 +17,11 @@ function cleanPrice(p) {
     return p;
 }
 
+/**
+ * Checks if the menu is expired relative to the current local time in Milford, PA.
+ * @param {string|null} expirationDateString The expiration date string.
+ * @returns {boolean} True if current time is past expiration, false otherwise.
+ */
 function isMenuExpired(expirationDateString) {
     if (!expirationDateString) return false;
 
@@ -27,6 +37,11 @@ function isMenuExpired(expirationDateString) {
     return nowInMilford > parsedDate;
 }
 
+/**
+ * Categorizes raw menu rows from spreadsheet into distinct lunch, soup, salad, app, entree, and dessert groups.
+ * @param {Array<Array<string>>} rows The raw rows from the Google Sheet.
+ * @returns {Object} Categorized menu object containing items lists, expiration date, and status.
+ */
 function categorizeMenuItems(rows) {
     const categories = {
         lunch: [],
