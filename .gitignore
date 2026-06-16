@@ -18,3 +18,7 @@ tests/php/test_cache.json
 # Agent Rules
 /.agents/rules/*
 !/.agents/rules/signage.md
+
+# dev too configs
+.prettierrc
+.markdownlint.json
