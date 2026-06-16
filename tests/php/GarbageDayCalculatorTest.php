@@ -1,8 +1,13 @@
 <?php
+declare(strict_types=1);
+
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../../GarbageDayCalculator.php';
 
+/**
+ * Unit tests for the GarbageDayCalculator class.
+ */
 class GarbageDayCalculatorTest extends TestCase
 {
     private GarbageDayCalculator $calculator;
@@ -12,7 +17,10 @@ class GarbageDayCalculatorTest extends TestCase
         $this->calculator = new GarbageDayCalculator();
     }
 
-    public function testStandardMondayPickup()
+    /**
+     * Tests standard Monday pickup when no delays or overrides exist.
+     */
+    public function testStandardMondayPickup(): void
     {
         // "Current" time: A random Wednesday (Feb 4, 2026) -> Next Monday is Feb 9
         $currentTime = strtotime('2026-02-04 12:00:00');
@@ -24,7 +32,10 @@ class GarbageDayCalculatorTest extends TestCase
         $this->assertEquals("", $result['reason']);
     }
 
-    public function testPickupOnMondayStaysMonday()
+    /**
+     * Tests that pickup date remains unchanged when run on Monday itself.
+     */
+    public function testPickupOnMondayStaysMonday(): void
     {
         // "Current" time: A Monday (Feb 9, 2026) -> Pickup is Today, Feb 9
         $currentTime = strtotime('2026-02-09 08:00:00');
@@ -34,7 +45,10 @@ class GarbageDayCalculatorTest extends TestCase
         $this->assertFalse($result['is_delayed']);
     }
 
-    public function testHolidayPushToTuesday_MemorialDay()
+    /**
+     * Tests that Memorial Day holiday shifts the pickup to Tuesday.
+     */
+    public function testHolidayPushToTuesday_MemorialDay(): void
     {
         // "Current" time: Thursday before Memorial Day 2026 (May 21, 2026)
         // Memorial day 2026 is Monday, May 25th.
@@ -48,7 +62,10 @@ class GarbageDayCalculatorTest extends TestCase
         $this->assertEquals("Memorial Day", $result['reason']);
     }
 
-    public function testHolidayPushToTuesday_LaborDay()
+    /**
+     * Tests that Labor Day holiday shifts the pickup to Tuesday.
+     */
+    public function testHolidayPushToTuesday_LaborDay(): void
     {
         // "Current" time: Friday before Labor Day 2026 (Sept 4, 2026)
         // Labor Day 2026 is Monday, Sept 7th.
@@ -61,7 +78,10 @@ class GarbageDayCalculatorTest extends TestCase
         $this->assertEquals("Labor Day", $result['reason']);
     }
 
-    public function testManualOverrideFromGoogleSheet()
+    /**
+     * Tests manual override parsed from Google Sheet override data.
+     */
+    public function testManualOverrideFromGoogleSheet(): void
     {
         // "Current" time: Feb 4, 2026. Normal pickup would be Feb 9.
         $currentTime = strtotime('2026-02-04 12:00:00');
@@ -81,7 +101,10 @@ class GarbageDayCalculatorTest extends TestCase
         $this->assertEquals("Blizzard Delay", $result['reason']);
     }
 
-    public function testPastManualOverrideIsIgnored()
+    /**
+     * Tests that past manual overrides are ignored.
+     */
+    public function testPastManualOverrideIsIgnored(): void
     {
         // "Current" time: Feb 4, 2026.
         $currentTime = strtotime('2026-02-04 12:00:00');
@@ -100,7 +123,10 @@ class GarbageDayCalculatorTest extends TestCase
         $this->assertFalse($result['is_delayed']);
     }
 
-    public function testInvalidDateManualOverrideIsIgnored()
+    /**
+     * Tests that invalid dates in manual overrides are safely ignored.
+     */
+    public function testInvalidDateManualOverrideIsIgnored(): void
     {
         // "Current" time: Feb 4, 2026. Normal pickup would be Feb 9.
         $currentTime = strtotime('2026-02-04 12:00:00');
@@ -119,7 +145,10 @@ class GarbageDayCalculatorTest extends TestCase
         $this->assertFalse($result['is_delayed']);
     }
 
-    public function testEmptyDateManualOverrideIsIgnored()
+    /**
+     * Tests that empty dates in manual overrides are safely ignored.
+     */
+    public function testEmptyDateManualOverrideIsIgnored(): void
     {
         // "Current" time: Feb 4, 2026. Normal pickup would be Feb 9.
         $currentTime = strtotime('2026-02-04 12:00:00');
@@ -138,7 +167,10 @@ class GarbageDayCalculatorTest extends TestCase
         $this->assertFalse($result['is_delayed']);
     }
 
-    public function testMalformedJsonManualOverrideIsIgnored()
+    /**
+     * Tests that malformed JSON in sheet data is safely ignored.
+     */
+    public function testMalformedJsonManualOverrideIsIgnored(): void
     {
         // "Current" time: Feb 4, 2026. Normal pickup would be Feb 9.
         $currentTime = strtotime('2026-02-04 12:00:00');
