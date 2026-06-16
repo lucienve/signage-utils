@@ -26,7 +26,7 @@ The architecture consists of:
 
 ## 2. Shared Logic and Libraries
 
-- **`proxy_helper.php`:** Shared utility function `fetch_with_cache` to execute cURL requests and cache responses with a configurable time-to-live (TTL). If a request fails, it attempts to return the stale cached file (`stale-while-revalidate` behavior).
+- **`proxy_helper.php`:** Shared utilities including `fetch_with_cache` (cURL execution and stale-while-revalidate caching) and `clear_cache_if_requested` (resilient on-demand cache file deletion).
 - **`GarbageDayCalculator.php`:** Encapsulates the logic for calculating Gold Key garbage pickup days, shifting dates for standard holidays (Memorial Day, Labor Day, New Year's, July 4th, Christmas), and processing overrides from the Google Sheet.
 - **`js/` Assets:** Shared JS logic (`goboard.js`, `menu.js`, `weather.js`) exported for both browser use and Node/Jest testing.
 

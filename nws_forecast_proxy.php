@@ -11,6 +11,8 @@ $cache_file = 'nws_forecast_cache.json';
 $cache_time = 3600; // 1 hour cache
 // ==========================================
 
+clear_cache_if_requested($cache_file);
+
 // Milford, PA (Gold Key) resolved forecast URL
 $url = "https://api.weather.gov/gridpoints/BGM/109,27/forecast";
 

@@ -86,4 +86,27 @@ function fetch_with_cache(string $url, string $cache_file, int $cache_time, arra
     echo $data;
     return true;
 }
+
+/**
+ * Safely clears the cache file if a 'clear' query parameter is present.
+ *
+ * @param string $cache_file Path to the cache file.
+ * @return void
+ */
+function clear_cache_if_requested(string $cache_file): void
+{
+    if (isset($_GET['clear'])) {
+        if (file_exists($cache_file)) {
+            try {
+                if (is_writable($cache_file)) {
+                    unlink($cache_file);
+                } else {
+                    header('X-Cache-Error: Cache file is not writable');
+                }
+            } catch (\Throwable $e) {
+                error_log("Failed to clear cache for $cache_file: " . $e->getMessage());
+            }
+        }
+    }
+}
 ?>

@@ -14,20 +14,7 @@ $GOOGLE_SHEET_ID = GOOGLE_SHEET_ID;
 $cache_file = 'garbage_cache.json'; // Added cache file for consistency
 $cache_time = 3600; // 1 Hour
 
-// If clear cache is requested, delete the existing cache file safely
-if (isset($_GET['clear'])) {
-    if (file_exists($cache_file)) {
-        try {
-            if (is_writable($cache_file)) {
-                unlink($cache_file);
-            } else {
-                header('X-Cache-Error: Cache file is not writable');
-            }
-        } catch (\Throwable $e) {
-            error_log("Failed to clear cache for $cache_file: " . $e->getMessage());
-        }
-    }
-}
+clear_cache_if_requested($cache_file);
 
 // ==========================================
 // 1. FETCH OVERRIDE DATA (Google Sheet)
