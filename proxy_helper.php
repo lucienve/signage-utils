@@ -19,7 +19,7 @@ declare(strict_types=1);
  * @param bool $return_only If true, returns the data instead of echoing it.
  * @return string|bool Returns string data, boolean false on error/failure. Note: may exit directly.
  */
-function fetch_with_cache(string $url, string $cache_file, int $cache_time, array $headers = [], bool $return_only = false)
+function fetch_with_cache(string $url, string $cache_file, int $cache_time, array $headers = [], bool $return_only = false): string|bool
 {
     // 1. Serve Cache if fresh
     if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time)) {
