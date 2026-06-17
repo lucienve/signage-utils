@@ -36,3 +36,9 @@ The architecture consists of:
 
 - **PHPUnit:** Used to run backend PHP unit tests (under `tests/php/`).
 - **Jest:** Used to run frontend JavaScript unit tests (under `tests/js/`).
+
+---
+
+## 4. Maintenance & Operations
+
+- **Dependabot:** Configured to automatically check and update dependencies weekly for `npm`, `composer`, and `github-actions` ecosystems. The configuration is stored in [.github/dependabot.yml](../.github/dependabot.yml).
