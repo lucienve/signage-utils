@@ -11,6 +11,6 @@
   "description": "",
   "devDependencies": {
     "jest": "^30.5.0",
-    "jest-environment-jsdom": "^30.4.1"
+    "jest-environment-jsdom": "^30.5.0"
   }
 }
