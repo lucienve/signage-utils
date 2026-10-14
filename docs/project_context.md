@@ -42,3 +42,4 @@ The architecture consists of:
 ## 4. Maintenance & Operations
 
 - **Dependabot:** Configured to automatically check and update dependencies weekly for `npm`, `composer`, and `github-actions` ecosystems. The configuration is stored in [.github/dependabot.yml](../.github/dependabot.yml).
+- **PHP Version Pinning:** Production is locked to PHP 8.1 (`ea-php81`). [composer.json](../composer.json) enforces `"php": "~8.1.0"` and `"config.platform.php": "8.1.31"` so Composer and Dependabot resolve dependencies strictly against PHP 8.1.
